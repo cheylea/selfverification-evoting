@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Page Needs
+         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+         <meta charset="utf-8">
+         <title>Cheylea Hopkinson</title>
+         <meta name="description" content="Welcome page for the e-voting system">
+         <meta name="author" content="Cheylea Hopkinson">
+         <!-- CSS
+            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/stylesheet.css') }}">
+         <!-- Favicon
+            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+         <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+     <!-- Page Header -->
+     <div class="header">
+        <img src="static\images\favicon-large.png" alt="Ballot box with Ballot" style="float: left;">
+        <h1>PROTOTYPE E-VOTING TOOL</h1>
+        <img src="static\images\favicon-large.png" alt="Ballot box with Ballot" style="float: right;">
+      </div>
+
+    {% block content %}
+    <div class="middle">
+        <h1>Welcome</h1>
+        <br>
+        <br>
+        <p>You have been invited to take part in a research study involving the review of an IT application and filling out a survey questionnaire.
+            As part of this survey, you have been asked to test out a prototype of a new evoting tool.
+            You can exit the tool at any time by closing the window. Please note that if not completing the test we will be unable to use your survey answers.
+        </p> 
+    </div>
+    <div class="middle-button">
+        <div class="button">
+            <a href="/information" class="button">Continue</a>
+        </div>
+    </div>
+    {% endblock %}
+
+    <!-- Page Footer -->
+    <div class="footer">
+        <p> 
+            This website was created for educational purpose. This is an example tool for simulating a government election. All rights reserved.
+        </p>    
+      </div>
+
+</body>
+</html>
