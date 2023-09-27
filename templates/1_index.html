@@ -20,9 +20,9 @@
 <body>
      <!-- Page Header -->
      <div class="header">
-        <img src="static\images\favicon-large.png" alt="Ballot box with Ballot" style="float: left;">
+        <img src="{{ url_for('static', filename='images/favicon-large.png') }}" alt="Ballot box with Ballot" style="float: left;">
         <h1>PROTOTYPE E-VOTING TOOL</h1>
-        <img src="static\images\favicon-large.png" alt="Ballot box with Ballot" style="float: right;">
+        <img src="{{ url_for('static', filename='images/favicon-large.png') }}" alt="Ballot box with Ballot" style="float: right;">
       </div>
 
     {% block content %}
@@ -37,7 +37,7 @@
     </div>
     <div class="middle-button">
         <div class="button">
-            <a href="/information" class="button">Continue</a>
+            <a href="/faqs" class="button">Continue</a>
         </div>
     </div>
     {% endblock %}
@@ -45,7 +45,7 @@
     <!-- Page Footer -->
     <div class="footer">
         <p> 
-            This website was created for educational purpose. This is an example tool for simulating a government election. All rights reserved.
+            This website was created for educational purposes. This is an example tool for simulating a government election. All rights reserved © Cheylea Hopkinson 2023.
         </p>    
       </div>
 

@@ -1,0 +1,29 @@
+{% extends '1_index.html' %}
+
+{% block content %}
+<div class="middle">
+    <h1>Vote</h1>
+    <form action="{{ url_for('submit_vote', pollstation=pollstation) }}", method="post">
+    <label for="candidates">Choose your candidate:</label>
+        <select id="candidates" name="candidates">
+          <option value="candidate1">Candidate One - Party Square</option>
+          <option value="candidate2">Candidate Two - Party Circle</option>
+          <option value="candidate3">Candidate Three - Party Triangle</option>
+          <option value="candidate4">Candidate Four - Party Rectangle</option>
+          <option value="candidate5">Candidate Five - Party Pentagon</option>
+          <option value="candidate6">Candidate Six - Party Hexagon</option>
+        </select>
+    <p>We require you to add a word that you can use to identify your vote. </p>   
+        <label for="sword">Enter your secret word:</label><br>
+        <br>
+        <input type="text" id="sword" name="sword"><br>
+    </div>
+    <div class="middle-button">
+        <div class="button">
+            <input type="submit" value="Click here to submit vote">
+        </div>
+    </div>
+    </form>
+    
+
+{% endblock %}

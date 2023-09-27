@@ -1,0 +1,15 @@
+{% extends '1_index.html' %}
+
+{% block content %}
+<div class="middle">
+    <h1>Verify Identification</h1>
+    <p>At this stage, you would be asked to provide your photo identification and take a live photo of yourself.
+    For the purposes of this test, test credentials {{ name }} will automatically pass the identification check.
+    </p>
+</div>
+<div class="middle-button">
+    <div class="button">
+        <a href="/vote/{{ pollstation }}" class="button">Verify Identity</a>
+    </div>
+</div>
+{% endblock %}

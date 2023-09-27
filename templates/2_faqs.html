@@ -1,0 +1,30 @@
+{% extends '1_index.html' %}
+
+{% block content %}
+<div class="middle">
+    <h1>Frequently Asked Questions</h1>
+    <p style="padding: 0.5%;">
+        Click the questions below to see the answers.
+    </p>
+    <div id='faqs'>
+        <h3><a href="#faq1" class="nav-tab tab1">Hows does the voting work?</a></h3>
+        <p id='faq1' class='faq1'>This online voting system uses technology "blockchain" to record your vote such that is cannot be changed.</p>
+    </div>
+    <div id='faqs'>
+        <h3><a href="#faq2" class="nav-tab nav-tab-active tab2">What is blockchain?</a></h3>
+          <p id='faq2' class='faq2'>Blockchain is a way of storing data in a chain that is linked together through a unique id. When data is stored,
+            it is broadcast to many places storing data using what is known as a peer to peer network. This means many people are able to see and view
+            the data stored when your vote is collected.</p>
+    </div>
+    <div id='faqs'>
+        <h3><a href="#faq3" class="nav-tab tab3">How can I know my vote will be counted correctly?</a></h3>
+          <p id='faq3' class='faq3'>This tool provides a self verification system whereby you can check your vote for a short period of time after voting.</p>
+        </div>
+      
+</div>
+<div class="middle-button">
+    <div class="button">
+        <a href="/checkeligibility" class="button">Continue</a>
+    </div>
+</div>
+{% endblock %}
