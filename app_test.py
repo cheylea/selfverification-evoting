@@ -2,6 +2,7 @@ import sqlite3
 import json
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from blockchain import Blockchain
+from datetime import datetime, timedelta
 
 blockchain = Blockchain()
 
@@ -131,22 +132,42 @@ def verifyid(pollnumber):
     voters = r"databases\voters.db"
     conn = connect_to_database(voters)
     cursor = conn.cursor()
-    cursor.execute(" SELECT name, pollstation FROM voters WHERE pollstation || CAST(pollnumber as text) = (?);", (pollnumber,))
+    cursor.execute(" SELECT name FROM voters WHERE pollstation || CAST(pollnumber as text) = (?);", (pollnumber,))
     result = cursor.fetchone()
     conn.close
+    return render_template("5_verifyid.html", name = result[0], pollnumber = pollnumber)
 
-    return render_template("5_verifyid.html", name = result[0], pollstation = result[1])
 
+@app.route("/enterword/<pollnumber>")
+def enterword(pollnumber):
+    return render_template("6_enterword.html", pollnumber = pollnumber)
 
-@app.route("/vote/<pollstation>")
-def vote(pollstation):
-    # add stoppage when putting in a bad secret word
-    # add "are you sure? pop up"
-    return render_template("6_vote.html", pollstation = pollstation)
+@app.route("/enterworderror/<pollnumber>")
+def enterworderror(pollnumber):
+    errormessage = 'The word you have entered cannot be used. Please select another word.'
+    return render_template("6_enterword.html", pollnumber = pollnumber, errormessage = errormessage)
+
+@app.route("/enterwordcheck/<pollnumber>", methods=['GET', 'POST'])
+def enterwordcheck(pollnumber):
+    votes = r"databases\votes.db"
+    conn = connect_to_database(votes)
+    cursor = conn.cursor()
+    secretword = request.form['sword'].upper()
+    pollstation = pollnumber[:3]
+    cursor.execute("SELECT COUNT(*) FROM words w WHERE pollstation IN ('all', (?)) AND word = (?);", (pollstation, secretword,))
+    wordcount = cursor.fetchone()
+    if wordcount[0] == 0:
+        return redirect(url_for('vote', pollnumber = pollnumber, secretword = secretword))
+    else:
+        return redirect(url_for('enterworderror', pollnumber = pollnumber))
+
+@app.route("/vote/<pollnumber>/<secretword>")
+def vote(pollnumber, secretword):
+    return render_template("7_vote.html", pollnumber = pollnumber, secretword = secretword)
 
 # Voting Submission
-@app.route('/submit_vote/<pollstation>', methods=['GET', 'POST'])
-def submit_vote(pollstation):
+@app.route('/submitvote/<pollnumber>/<secretword>', methods=['GET', 'POST'])
+def submitvote(pollnumber, secretword):
     votes = r"databases\votes.db"
     conn = connect_to_database(votes)
     cursor = conn.cursor()
@@ -157,20 +178,50 @@ def submit_vote(pollstation):
     previous_proof = previous_block['proof']
     proof = blockchain.proof_of_work(previous_proof)
     previous_hash = blockchain.hash(previous_block)
-    secretword = request.form['sword']
     candidate = request.form['candidates']
+    pollstation = ''.join(filter(str.isalpha, pollnumber))
     block = blockchain.create_block(proof, pollstation, secretword, candidate, previous_hash)
     block = str(json.dumps(block))
-    cursor.execute("INSERT INTO votes (block) VALUES (?)",(block,))
+    cursor.execute("INSERT INTO votes (block) VALUES (?)", (block,))
+    conn.commit()
+    cursor.execute("INSERT INTO words (word, pollstation) VALUES (?, ?)", (secretword, pollstation,))
+    conn.commit()
+    # In full version the person would be marked as ineligible to vote once vote is committed
     conn.close
-    return render_template("7_complete.html")
+    return render_template("8_complete.html")
 
 @app.route("/verify")
 def verify():
     # add self verification logic, submit poll station and secret word
-    return render_template("8_verify.html")
+    return render_template("9_verify.html")
+
+@app.route("/fetchvote/", methods=['GET', 'POST'])
+def fetchvote():
+    secretword = request.form['sword'].upper()
+    pollstation = request.form['pollstation'].upper()
+    voter = pollstation + secretword
+    sqlstring = "SELECT block FROM votes v WHERE block LIKE '%" + voter + "%';"
+
+    votes = r"databases\votes.db"
+    conn = connect_to_database(votes)
+    cursor = conn.cursor()
+    cursor.execute(sqlstring)
+    voteblock = cursor.fetchall()
+    for row in voteblock:
+        voteblock = json.loads(row[0])
+    candidate = voteblock['candidate']
+    timestamp = voteblock['timestamp']
+    currenttime = datetime.now()
+    timelimit = (datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") + timedelta(minutes=5))
+    print(timelimit)
+    if currenttime >= timelimit:
+        errormessage = 'Time to verify vote has expired.'
+        candidate = 'Unable to view candidate.'
+        return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
+    else:
+        errormessage = ''
+        candidate = 'You voted for ' + candidate + '.'
+        return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
 
 if __name__ == '__main__':
     main()
-    
-    

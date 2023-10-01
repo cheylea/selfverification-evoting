@@ -1,0 +1,21 @@
+{% extends '1_index.html' %}
+
+{% block content %}
+<div class="middle">
+    <h1>Vote</h1>
+    <form action="{{ url_for('enterwordcheck', pollnumber=pollnumber) }}", method="post">
+    <p>We require you to add a word that you can use to identify your vote. </p>   
+    <p style = "color: red; font-weight: bold">{{ errormessage }}</p>
+        <label for="sword">Enter your secret word:</label><br>
+        <br>
+        <input type="text" id="sword" name="sword" style="text-transform:uppercase" maxlength="15"><br>
+    </div>
+    <div class="middle-button">
+        <div class="button">
+            <input type="submit" value="Click here to submit word">
+        </div>
+    </div>
+    </form>
+    
+
+{% endblock %}

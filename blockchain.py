@@ -31,7 +31,7 @@ class Blockchain:
     # to add further blocks
     # into the chain
     def create_block(self, proof, pollstation, secretword, candidate, previous_hash):
-        voter = pollstation,secretword #add some kind of ecryption?
+        voter = pollstation + secretword #add some kind of ecryption?
         block = {'index': len(self.chain) + 1,
                  'timestamp': str(datetime.datetime.now()),
                  'proof': proof,

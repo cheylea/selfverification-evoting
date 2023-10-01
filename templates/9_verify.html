@@ -1,0 +1,23 @@
+{% extends '1_index.html' %}
+
+{% block content %}
+<div class="middle">
+    <h1>Verify your vote</h1>
+    <form action="{{ url_for('fetchvote', pollstation=pollstation, secretword = secretword) }}", method="post">
+    <p>You are able to view your vote on the public ledger by entering your secret word for a short period of time after submitting. </p>   
+    <p style = "color: red; font-weight: bold">{{ errormessage }}</p>
+        <label for="sword">Enter your secret word:</label><br>
+        <br>
+        <input type="text" id="sword" name="sword" style="text-transform:uppercase" maxlength="15"><br>
+
+        <label for="sword">Enter your poll station:</label><br>
+        <br>
+        <input type="text" id="pollstation" name="pollstation" style="text-transform:uppercase" maxlength="15"><br>
+    </div>
+    <div class="middle-button">
+        <div class="button">
+            <input type="submit" value="Click here to submit word">
+        </div>
+    </div>
+    </form>
+{% endblock %}
