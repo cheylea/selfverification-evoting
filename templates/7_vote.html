@@ -6,13 +6,10 @@
     <form action="{{ url_for('submitvote', pollnumber=pollnumber, secretword = secretword) }}", method="post">
     <label for="candidates">Choose your candidate:</label>
         <select id="candidates" name="candidates">
-          <option value="candidate1">Candidate One - Party Square</option>
-          <option value="candidate2">Candidate Two - Party Circle</option>
-          <option value="candidate3">Candidate Three - Party Triangle</option>
-          <option value="candidate4">Candidate Four - Party Rectangle</option>
-          <option value="candidate5">Candidate Five - Party Pentagon</option>
-          <option value="candidate6">Candidate Six - Party Hexagon</option>
-        </select>
+        {% for candidates in candidates %}
+        <option value='{{candidates.candidatename}}'>{{candidates[1]}} - {{candidates[2]}}</option>
+        {% endfor %}
+    <br>
     <div class="middle-button">
         <div class="button">
             <input type="submit" value="Click here to submit vote">

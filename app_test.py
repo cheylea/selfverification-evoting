@@ -1,29 +1,96 @@
 import sqlite3
 import json
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 from blockchain import Blockchain
 from datetime import datetime, timedelta
+from cryptography.fernet import Fernet
+from instance.config import encryption_key, port
+
 
 blockchain = Blockchain()
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_pyfile('config.py')
+key = encryption_key
+
 
 # Functions for databases
 
 def connect_to_database(database_file):
+    """Connect to a sqlite database
+
+    Key arguments
+    database_file -- location of sqlite database file
+    """
     conn = sqlite3.connect(database_file, isolation_level=None)
     conn.row_factory = sqlite3.Row
     print("Connection successful!")
     return conn
 
 def execute_sql(conn, sql):
+    """Execute SQL to a sqlite database
+
+    Key arguments
+    conn -- sqlite connection
+    sql -- string of sqlite code
+    """
     c = conn.cursor()
     c.execute(sql)
 
+def execute_sql_fetch_one(conn, sql):
+    """Execute SQL to a sqlite database
+    and fetch answer (one answer only)
+
+    Key arguments
+    conn -- sqlite connection
+    sql -- select string of sqlite code
+    """
+    c = conn.cursor()
+    c.execute(sql)
+    result = c.fetchone()
+    return result
+
+def execute_sql_fetch_all(conn, sql):
+    """Execute SQL to a sqlite database
+    and fetch all answers (multiple answers only)
+
+    Key arguments
+    conn -- sqlite connection
+    sql -- select string of sqlite code
+    """
+    c = conn.cursor()
+    c.execute(sql)
+    result = c.fetchall()
+    return result
+
+def encrypt(key, message: bytes):
+    """Encrypt the provided variable
+
+    Key arguments
+    key -- key to encrypt with
+    message -- the value to be encrypted
+    """
+    message = message.encode()
+    return Fernet(key).encrypt(message)
+
+def decrypt(key, token: bytes):
+    """Decrypt the provided variable
+
+    Key arguments
+    key -- key to encrypt with
+    message -- the value to be encrypted
+    """
+    message  = Fernet(key).decrypt(token)
+    return message.decode('utf-8')
+
 def main():
-    app.run(debug=True, port = 8000)
+    """Function that initialises the programme and sets
+    up the starting databases
+
+    """
+
     # Create table for the voters database
-    voters = r"databases\voters.db"
+    voters = r"databases_test\voters.db"
 
     # Table that stores information required to identify is a voter is eligible
     drop_table_voters = """DROP TABLE IF EXISTS voters; """
@@ -45,23 +112,29 @@ def main():
                                 (3, 'ABC', 3, 'Bailey Voter (Test)', '3 Example Street', 'ZZ01 000', 1);
                               """
     
+    # Make connection to voters database file
     conn = connect_to_database(voters)
     if conn is not None:
+        # Execute required sql
         execute_sql(conn, drop_table_voters)
         execute_sql(conn, create_table_voters)
         execute_sql(conn, insert_table_voters)
+        print("Voter database complete.")
+        
     else:
         print("Error, no connection.")
     
     # Create tables for the votes database
-    votes = r"databases\votes.db"
+    votes = r"databases_test\votes.db"
 
     # Table that stores the blockchain
-    create_table_votes = """ TRUNCATE TABLE votes; CREATE TABLE IF NOT EXISTS votes (
+    drop_table_votes = """DROP TABLE IF EXISTS votes; """
+    create_table_votes = """ CREATE TABLE IF NOT EXISTS votes (
                                 id integer PRIMARY KEY,
                                 block text
                             ); """
     # Table that stores words that cannot be used as secret words
+    drop_table_words = """DROP TABLE IF EXISTS words; """
     create_table_words = """ CREATE TABLE IF NOT EXISTS words (
                                 id integer PRIMARY KEY,
                                 word text,
@@ -77,16 +150,50 @@ def main():
                                 (5, 'Bailey', 'all'),
                                 (6, 'Example', 'all');
                             """
+    
+    # Table that stores basic information about test candidates
+    drop_table_candidates = """DROP TABLE IF EXISTS candidates; """
+    create_table_candidates = """ CREATE TABLE IF NOT EXISTS candidates (
+                                id integer PRIMARY KEY,
+                                candidatename text,
+                                candidateparty text
+                            ); """
+    
+    # Insert test candidates
+    insert_table_candidates = """ INSERT INTO candidates (id, candidatename, candidateparty)
+                              VALUES
+                                (1, 'Amanda Candidate', 'Circle Party'),
+                                (2, 'Benjamin Candidate', 'Triangle Party'),
+                                (3, 'Chloe Candidate', 'Square Party'),
+                                (4, 'David Candidate', 'Pentagon Party'),
+                                (5, 'Emma Candidate', 'Hexagon Party'),
+                                (6, 'Frederick Candidate', 'Octogon Party');
+                              """
+    
+    # Make connection to voters database file
     conn = connect_to_database(votes)
-
     if conn is not None:
+        # Execute required sql
+        execute_sql(conn, drop_table_votes)
         execute_sql(conn, create_table_votes)
+        execute_sql(conn, drop_table_words)
         execute_sql(conn, create_table_words)
         execute_sql(conn, insert_table_words)
+        execute_sql(conn, drop_table_candidates)
+        execute_sql(conn, create_table_candidates)
+        execute_sql(conn, insert_table_candidates)
+        print("Votes database complete.")
     else:
         print("Error, no connection.")
-    
+
+    # Add first block to the database so it has a starting point
+    firstblock = blockchain.create_block(proof=1, pollstation='none', secretword='none', candidate='none', previous_hash='0')
+    firstblock = str(json.dumps(firstblock))
+    insert_first_block = "INSERT INTO votes (block) VALUES ('" + firstblock + "');"
+    execute_sql(conn, insert_first_block)
     conn.close()
+    
+    app.run(debug=True, port = port)
 
 # App route for index, an introduction welcome page for survey testing
 @app.route("/")
@@ -98,130 +205,174 @@ def home():
 def info():
     return render_template("2_faqs.html")
 
-# 
+# Placeholder for providing your poll number or name and address to check eligibility (must come before ID check)
 @app.route("/checkeligibility")
 def checkeligibility():
-    voters = r"databases\voters.db"
+    # Connect to voters and get full list
+    voters = r"databases_test\voters.db"
+    select_all_voters = "SELECT * FROM voters;"
     conn = connect_to_database(voters)
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM voters;")
-    test_voters = cursor.fetchall()
+    result = execute_sql_fetch_all(conn, select_all_voters)
     conn.close
-    return render_template("3_checkeligibility.html", test_voters = test_voters)
+    return render_template("3_checkeligibility.html", test_voters = result)
 
 # Verify if the person is eligible to vote
 @app.route("/verifyeligibility", methods=['GET', 'POST'])
 def verifyeligibility():
-    voters = r"databases\voters.db"
-    conn = connect_to_database(voters)
-    cursor = conn.cursor()
+    # Connect to voters and get eligibility check for person
+    voters = r"databases_test\voters.db"
     pollnumber = request.form['tester']
-    cursor.execute(" SELECT IsEligible FROM voters WHERE pollstation || CAST(pollnumber as text) = (?);", (pollnumber,))
-    result = cursor.fetchone()
+    select_eligibility = "SELECT IsEligible FROM voters WHERE pollstation || CAST(pollnumber as text) = '" + pollnumber + "';"
+    conn = connect_to_database(voters)
+    result = execute_sql_fetch_one(conn, select_eligibility)
     conn.close
-    if result[0] == 1: # Checks if person is eligible to vote
+
+
+    pollnumber = encrypt(key, pollnumber) # encrypt for url
+    if result[0] == 1: 
+        # If person is eligible, proceed
         return redirect(url_for('verifyid', pollnumber = pollnumber))
     else:
+        # If person is not eligible, redirect
+        # For this version of the tool this is an error page as all test credentials should be eligible
         return redirect("error.html")
-    
     
 
 # Placeholder for identification process in full version of the artefact
 @app.route("/verifyid/<pollnumber>")
 def verifyid(pollnumber):
-    voters = r"databases\voters.db"
+    # Connect to voters and their details for screen display
+    voters = r"databases_test\voters.db"
+    pollnumber = decrypt(key, pollnumber) # decrypt for database
+    select_voter_details = "SELECT name FROM voters WHERE pollstation || CAST(pollnumber as text) = '" + pollnumber + "';"
     conn = connect_to_database(voters)
-    cursor = conn.cursor()
-    cursor.execute(" SELECT name FROM voters WHERE pollstation || CAST(pollnumber as text) = (?);", (pollnumber,))
-    result = cursor.fetchone()
+    result = execute_sql_fetch_one(conn, select_voter_details)
     conn.close
-    return render_template("5_verifyid.html", name = result[0], pollnumber = pollnumber)
 
+    pollnumber = encrypt(key, pollnumber) # encrypt for url
+    return render_template("5_verifyid.html", name = result[0], pollnumber = pollnumber.decode('utf-8'))
 
+# Screen to enter secret word
 @app.route("/enterword/<pollnumber>")
 def enterword(pollnumber):
     return render_template("6_enterword.html", pollnumber = pollnumber)
 
+# Submission route when entering a secret word
+@app.route("/enterwordcheck/<pollnumber>", methods=['GET', 'POST'])
+def enterwordcheck(pollnumber):
+    #  Connect to votes database to check if secret word has been used
+    votes = r"databases_test\votes.db"
+    secretword = request.form['sword'].upper()
+    pollnumber = pollnumber.encode()
+    pollnumber = decrypt(key, pollnumber) # decrypt for database
+    pollstation = pollnumber[:3] # extract poll station from poll number
+    count_matching_words = "SELECT COUNT(*) FROM words w WHERE pollstation IN ('all', '"+ pollstation +"') AND word = '" + secretword + "';"
+    conn = connect_to_database(votes)
+    result = execute_sql_fetch_one(conn, count_matching_words)
+    conn.close
+
+    pollnumber = encrypt(key, pollnumber) # encrypt for url
+    secretword = encrypt(key, secretword) # encrypt for url
+    if result[0] == 0:
+        # If word has not been used, proceed to voe page
+        return redirect(url_for('vote', pollnumber = pollnumber, secretword = secretword))
+    else:
+        # If word has been used before, error and redirect to page indicating to try again
+        return redirect(url_for('enterworderror', pollnumber = pollnumber))
+
+# Screen to enter secret word when previous word cannot be used with error message
 @app.route("/enterworderror/<pollnumber>")
 def enterworderror(pollnumber):
     errormessage = 'The word you have entered cannot be used. Please select another word.'
     return render_template("6_enterword.html", pollnumber = pollnumber, errormessage = errormessage)
 
-@app.route("/enterwordcheck/<pollnumber>", methods=['GET', 'POST'])
-def enterwordcheck(pollnumber):
-    votes = r"databases\votes.db"
-    conn = connect_to_database(votes)
-    cursor = conn.cursor()
-    secretword = request.form['sword'].upper()
-    pollstation = pollnumber[:3]
-    cursor.execute("SELECT COUNT(*) FROM words w WHERE pollstation IN ('all', (?)) AND word = (?);", (pollstation, secretword,))
-    wordcount = cursor.fetchone()
-    if wordcount[0] == 0:
-        return redirect(url_for('vote', pollnumber = pollnumber, secretword = secretword))
-    else:
-        return redirect(url_for('enterworderror', pollnumber = pollnumber))
-
+# Screen to vote
 @app.route("/vote/<pollnumber>/<secretword>")
 def vote(pollnumber, secretword):
-    return render_template("7_vote.html", pollnumber = pollnumber, secretword = secretword)
+    # Connect to voters database to get list of candidates to vote for
+    voters = r"databases_test\votes.db"
+    select_all_candidates = "SELECT * FROM candidates;"
+    conn = connect_to_database(voters)
+    result = execute_sql_fetch_all(conn, select_all_candidates)
+    conn.close
+    return render_template("7_vote.html", candidates = result, pollnumber = pollnumber, secretword = secretword)
 
-# Voting Submission
+# Submission route when submitting vote
 @app.route('/submitvote/<pollnumber>/<secretword>', methods=['GET', 'POST'])
 def submitvote(pollnumber, secretword):
-    votes = r"databases\votes.db"
+    # Connect to votes database to get last block
+    votes = r"databases_test\votes.db"
+    select_last_block = "SELECT block FROM votes v JOIN (SELECT MAX(id) id FROM votes) max ON max.id = v.id"
     conn = connect_to_database(votes)
-    cursor = conn.cursor()
-    cursor.execute("SELECT block FROM votes v JOIN (SELECT MAX(id) id FROM votes) max ON max.id = v.id ")
-    previous_block = cursor.fetchall()
+    previous_block = execute_sql_fetch_all(conn, select_last_block)
+
+    # Loads the different parts of the blockchain block
     for row in previous_block:
         previous_block = json.loads(row[0])
     previous_proof = previous_block['proof']
+
+    # Get required block variables
     proof = blockchain.proof_of_work(previous_proof)
     previous_hash = blockchain.hash(previous_block)
     candidate = request.form['candidates']
+    pollnumber = decrypt(key, pollnumber.encode())
+    secretword = decrypt(key, secretword)
     pollstation = ''.join(filter(str.isalpha, pollnumber))
+
+    # Mine new block
     block = blockchain.create_block(proof, pollstation, secretword, candidate, previous_hash)
     block = str(json.dumps(block))
-    cursor.execute("INSERT INTO votes (block) VALUES (?)", (block,))
-    conn.commit()
-    cursor.execute("INSERT INTO words (word, pollstation) VALUES (?, ?)", (secretword, pollstation,))
+
+    # Insert block and used word into votes database
+    insert_new_block = "INSERT INTO votes (block) VALUES ('" + block + "');"
+    insert_used_word = "INSERT INTO words (word, pollstation) VALUES ('" + secretword + "', '" + pollstation + "');"
+    execute_sql(conn, insert_new_block)
+    execute_sql(conn, insert_used_word)
     conn.commit()
     # In full version the person would be marked as ineligible to vote once vote is committed
     conn.close
     return render_template("8_complete.html")
 
+# Screen to request pollstation and secret word to verify vote
 @app.route("/verify")
 def verify():
-    # add self verification logic, submit poll station and secret word
     return render_template("9_verify.html")
 
+# Submission route when requesting verification
 @app.route("/fetchvote/", methods=['GET', 'POST'])
 def fetchvote():
+    # Connect to votes database to get who person voted for
     secretword = request.form['sword'].upper()
     pollstation = request.form['pollstation'].upper()
     voter = pollstation + secretword
-    sqlstring = "SELECT block FROM votes v WHERE block LIKE '%" + voter + "%';"
-
-    votes = r"databases\votes.db"
+    votes = r"databases_test\votes.db"
+    select_vote = "SELECT block FROM votes v WHERE block LIKE '%" + voter + "%';"
     conn = connect_to_database(votes)
-    cursor = conn.cursor()
-    cursor.execute(sqlstring)
-    voteblock = cursor.fetchall()
+    voteblock = execute_sql_fetch_all(conn, select_vote)
+    conn.close()
+
+    # Loads the different parts of the blockchain block
     for row in voteblock:
         voteblock = json.loads(row[0])
+    
+    # Calculate if vote is in expiration period
     candidate = voteblock['candidate']
     timestamp = voteblock['timestamp']
     currenttime = datetime.now()
     timelimit = (datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") + timedelta(minutes=5))
-    print(timelimit)
+
     if currenttime >= timelimit:
+        # If too much time has passed, the user is notified this has expired
         errormessage = 'Time to verify vote has expired.'
         candidate = 'Unable to view candidate.'
         return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
     else:
+        # If still within the time frame, user is shown their vote
         errormessage = ''
         candidate = 'You voted for ' + candidate + '.'
         return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
 
+# Initialise
+main()
 if __name__ == '__main__':
     main()
