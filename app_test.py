@@ -4,8 +4,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from blockchain import Blockchain
 from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
-from .instance.config import encryption_key, port
-
+from instance.config import encryption_key, port
+from socket import gethostname
 
 blockchain = Blockchain()
 
@@ -192,8 +192,6 @@ def main():
     insert_first_block = "INSERT INTO votes (block) VALUES ('" + firstblock + "');"
     execute_sql(conn, insert_first_block)
     conn.close()
-    
-    app.run(debug=True, port = port)
 
 # App route for index, an introduction welcome page for survey testing
 @app.route("/")
@@ -376,3 +374,5 @@ def fetchvote():
 main()
 if __name__ == '__main__':
     main()
+    if 'liveconsole' not in gethostname():
+        app.run()
