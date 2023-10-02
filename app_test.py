@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from blockchain import Blockchain
 from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
-from instance.config import encryption_key, port
+from .instance.config import encryption_key, port
 
 
 blockchain = Blockchain()
