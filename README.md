@@ -33,16 +33,30 @@ Create the folder `instance` in the repository as indicated in the director. Cre
 ```python
 SECRET_KEY = ''
 encryption_key = ''
-port = 
 ```
 
-Add your own keys into the strings to run the programme, and the local port you wish to run the application.
+Add your own keys into the strings to run the programme.
 
 # Usage
 
-Run `app_test.py` to run the application on the chosen port in the `config.py` file and navigate to view. For example, if port is set to `8000`, naviaget to http://127.0.0.1:8000.
+Run `app_test.py` to run the application on the chosen port in the `config.py` file and navigate to view. You can configure the port at the bottom of the `app_test.py`. For example:
 
-Once loaded, click through the application to use it.
+```python
+# Before
+if __name__ == '__main__':
+    main()
+    # If statement to prevent run when hosting in PythonAnywhere
+    if 'liveconsole' not in gethostname():
+        app.run()
+
+# After
+if __name__ == '__main__':
+    main()
+    # If statement to prevent run when hosting in PythonAnywhere
+    if 'liveconsole' not in gethostname():
+        app.run(debug=True, port = 8000)
+```
+Then, if port is set to `8000`, navigate to http://127.0.0.1:8000 to view and click through the application to use it.
 
 # Contributing
 Pull requests permitted.
