@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from blockchain import Blockchain
 from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
-from instance.config import encryption_key, port
+from instance.config import encryption_key
 from socket import gethostname
 
 blockchain = Blockchain()
@@ -349,30 +349,40 @@ def fetchvote():
     voteblock = execute_sql_fetch_all(conn, select_vote)
     conn.close()
 
-    # Loads the different parts of the blockchain block
-    for row in voteblock:
-        voteblock = json.loads(row[0])
-    
-    # Calculate if vote is in expiration period
-    candidate = voteblock['candidate']
-    timestamp = voteblock['timestamp']
-    currenttime = datetime.now()
-    timelimit = (datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") + timedelta(minutes=5))
+    # If vote is found
+    if voteblock:
+        # Loads the different parts of the blockchain block
+        for row in voteblock:
+            voteblock = json.loads(row[0])
 
-    if currenttime >= timelimit:
-        # If too much time has passed, the user is notified this has expired
-        errormessage = 'Time to verify vote has expired.'
+        # Calculate if vote is in expiration period
+        candidate = voteblock['candidate']
+        timestamp = voteblock['timestamp']
+        currenttime = datetime.now()
+        timelimit = (datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") + timedelta(minutes=5))
+
+        if currenttime >= timelimit:
+            # If too much time has passed, the user is notified this has expired
+            errormessage = 'Time to verify vote has expired.'
+            candidate = 'Unable to view candidate.'
+            return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
+        else:
+            # If still within the time frame, user is shown their vote
+            errormessage = ''
+            candidate = 'You voted for ' + candidate + '.'
+            return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
+
+    # If vote cannot be found
+    else:
+        errormessage = 'Word and polling station did not find a match.'
         candidate = 'Unable to view candidate.'
         return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
-    else:
-        # If still within the time frame, user is shown their vote
-        errormessage = ''
-        candidate = 'You voted for ' + candidate + '.'
-        return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
+
+    
 
 # Initialise
-main()
 if __name__ == '__main__':
     main()
+    # If statement to prevent run when hosting in PythonAnywhere
     if 'liveconsole' not in gethostname():
         app.run()
