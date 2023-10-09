@@ -3,12 +3,25 @@
 {% block content %}
 <div class="middle">
     <h1>Vote</h1>
+    <p style = "padding: 1%">Please choose ONE of the candidates below to vote for.</p>
     <form action="{{ url_for('submitvote', pollnumber=pollnumber, secretword = secretword) }}", method="post">
-    <label for="candidates">Choose your candidate:</label>
-        <select id="candidates" name="candidates">
+    <p style = "padding: 1%">Choose your candidate:</p><br>
+    <div class="custom-radios">
         {% for candidates in candidates %}
-        <option value='{{candidates.candidatename}}'>{{candidates[1]}} - {{candidates[2]}}</option>
+        <div>
+        <input type="radio" id="{{candidates.candidatename}}" name="candidates" value="{{candidates.candidatename}}" checked>
+        <label for="{{candidates.candidatename}}">
+          <span>
+            <img src="{{url_for('static',filename='images/cross.svg')}}"  alt="Checked Icon" />
+          </span>
+          </label>
+          {{candidates[1]}} - {{candidates[2]}}
+        </div>
+        <div>
+        </div>
+        <br>
         {% endfor %}
+    </div>
     <br>
     <div class="middle-button">
         <div class="button">

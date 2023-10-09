@@ -27,6 +27,7 @@
   body {
     background-color: #F3F2F1;
     font-family: Arial, sans-serif;  /* Set standard font for entire website */
+    font-size: calc(15px + 0.390625vw);
   }
 
 
@@ -35,12 +36,12 @@
   ––––––––––––––––––––––––––––––––––––––––––––––––––-------------------- */
   .header {
     display: flex;
-    padding: 2%;
+    padding: 3%;
     background: #1D70B8;
     text-align: center;
-    margin-bottom: 2%;
-    
+    margin-bottom: 5%;
   }
+
   .header h1 {
     color: white;
     font-size: 5vw;
@@ -50,8 +51,8 @@
     margin-top: 1%;
   }
   .header img {
-    width: 6%;
-    height: 6%;
+    width: 8%;
+    height: 8%;
     float: left;
   }
 
@@ -62,19 +63,16 @@
     padding: 2%;
     border-width: 5%;
     border-radius: 25px;
-    width: 60%;
-    height: 25vw;
-    background: #D5D1CD;
+    width: 80%;
     text-align: center
-
   }
+
   .middle h1 {
     color: black;
-    font-size: 2vw;
-    margin: 0.5%;
+    font-size: calc(30px + 0.390625vw);
+    
   }
   .middle p {
-    font-size: 1vw;
     padding: 4%;
   }
 
@@ -91,6 +89,10 @@
     padding: 1%
   }
 
+  .middle select {
+    padding: 1%
+  }
+
      /* 2. Button syling
   ––––––––––––––––––––––––––––––––––––––––––––––––––-------------------- */
   .button {
@@ -99,8 +101,7 @@
     border-radius: 11px;
     font-family: Arial;
     color: #ffffff;
-    font-size: 2vw;
-    padding: 0.5vw 1vw 0.5vw 1vw;
+    padding: 0.5vw 2vw 0.5vw 2vw;
     text-decoration: none;
     text-align: center;
   }
@@ -113,39 +114,114 @@
     text-decoration: none;
   }
 
+     /* 2. HTML Input Styling
+  ––––––––––––––––––––––––––––––––––––––––––––––––––-------------------- */
+
   input[type=submit] {
+    margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
     border-radius: 11px;
     font-family: Arial;
     color: #ffffff;
-    font-size: 2vw;
-    padding: 0.5vw 1vw 0.5vw 1vw;
+    padding: 0.5vw 2vw 0.5vw 2vw;
     text-decoration: none;
     text-align: center;
     background: #000000;
     text-decoration: none;
+    font-size: calc(15px + 0.390625vw);
+    display: block;
   }
+
   input[type=submit]:hover {
     background: #1d70b8;
     text-decoration: none;
   }
-  
+
+  input[type=text] {
+    font-size: calc(15px + 0.390625vw);
+  }
+
+  /*input[type=radio] {
+    box-sizing: border-box;
+    appearance: none;
+    background: white;
+    outline: 2px solid #333;
+    border: 3px solid white;
+    width: calc(40px + 0.390625vw);
+    height: calc(40px + 0.390625vw);
+  }
+
+  /* using https://www.sliderrevolution.com/resources/styling-radio-buttons/ */
+  .custom-radios div {
+    display: inline-block;
+    text-align: left;
+    width: calc(800px + 0.390625vw);
+    margin: auto;
+  }
+
+  .custom-radios input[type="radio"] {
+    display: none;
+  }
+  .custom-radios input[type="radio"] + label {
+    color: black;
+    font-family: Arial, sans-serif;
+    font-size: calc(15px + 0.390625vw);
+  }
+  .custom-radios input[type="radio"] + label span {
+    display: inline-block;
+    box-sizing: border-box;
+    appearance: none;
+    width: calc(40px + 0.390625vw);
+    height: calc(40px + 0.390625vw);
+    vertical-align: middle;
+    cursor:  url('pencil_cursor.ico'), auto;
+    outline: 2px solid black;
+    background: white;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 1.5%;
+  }
+  .custom-radios img {
+    opacity: 0;
+    transition: all 0.3s ease;
+    width: calc(40px + 0.390625vw);
+    height: calc(40px + 0.390625vw);
+  }
+  .custom-radios input[type="radio"] + label span img {
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .custom-radios input[type="radio"]:checked + label span img {
+    opacity: 1;
+  }
   
   /* 8. Styling for the footer of website
   –––––––––––––––––––––––––––––––––––––––––––––––––– */
-  .footer {
-    width: 100%;
-    height: 5%;
-    text-align: center;
-    background-color: #1D70B8;
-    position: fixed;
-    left: 0;
-    bottom: 0;
+  .page-container {
+    position: relative;
+    min-height: 100vh;
   }
+  
+  .content-wrap {
+    padding-bottom: 2rem;    /* Footer height */
+  }
+  
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2rem;            /* Footer height */
+    background-color: #1D70B8;
+    text-align: center;
+  }
+  
   .footer p {
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     color: white;
-    font-size: 1vw;
+    font-size: 0.7rem;
   }
 
   /* 9. FAQ Styling
@@ -167,7 +243,6 @@
     display:block;
   }
   div#faqs h3 {
-    font-size: 1.5vw;
     padding: 1%;
     font-weight: bold;
   }

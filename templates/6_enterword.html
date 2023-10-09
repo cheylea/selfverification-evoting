@@ -2,19 +2,20 @@
 
 {% block content %}
 <div class="middle">
-    <h1>Vote</h1>
+    <h1>Secret Word</h1>
     <form action="{{ url_for('enterwordcheck', pollnumber=pollnumber) }}", method="post">
-    <p>We require you to add a word that you can use to identify your vote. </p>   
-    <p style = "color: red; font-weight: bold">{{ errormessage }}</p>
+    <p>Please enter your secret word which you will use to check your vote. Remember: you can use a word or phrase up to 15 letters.
+        However, you can't use any names of other voters or addresses. You also can't use a word that has already been used
+        by another voter at your poll station. Try to choose something easy to remember. If you forget your secret word you
+        will not be able to see your vote.</p>   
+    <p style = "color: red; font-weight: bold; padding: 2%">{{ errormessage }}</p>
         <label for="sword">Enter your secret word:</label><br>
         <br>
         <input type="text" id="sword" name="sword" style="text-transform:uppercase" maxlength="15"><br>
     </div>
-    <div class="middle-button">
         <div class="button">
             <input type="submit" value="Click here to submit word">
         </div>
-    </div>
     </form>
     
 

@@ -2,24 +2,26 @@
 
 {% block content %}
 <div class="middle">
-    <h1>Check eligible to vote</h1>
-    <p>When voting in person you are asked at the polling to booth to provide your poll number or name a first line of your address to vote with.
+    <h1>Check if you can vote</h1>
+    <p>When voting in person you are asked at the polling to booth to provide your poll number or name and first line of your address to vote with.
+        In a real version of this tool, you would enter either your poll number or address to check you are able to vote.
+        For the purposes of this survey, we have provided some test voter details.
         <br>
-        In a real version of this tool, it is at this point you would enter either your poll number or address to check you are eligible to vote.
         <br>
-        For the purposes of this survey, we have provided some test voter details. Please choose any test credentials to get started.
+        Please choose any test credentials to get started.
     </p>
     <form action="{{ url_for("verifyeligibility")}}" method="post">
         <label for="tester">Choose your test credentials:</label>
+        <br>
+        <br>
         <select id="tester" name="tester">
         {% for voter in test_voters %}
         <option value='{{voter.pollstation}}{{voter.pollnumber}}'>{{voter[1]}}{{voter[2]}} - {{voter[3]}}</option>
         {% endfor %}
-</div>
-    <div class="middle-button">
-        <div class="button">
-            <input type="submit" value="Continue">
-        </div>
     </form>
+</div>
+    <div class="button">
+        <input type="submit" value="Continue">
+    </div>
 </div>
 {% endblock %}

@@ -4,8 +4,8 @@
 <div class="middle">
     <h1>Verify your vote</h1>
     <form action="{{ url_for('fetchvote', pollstation=pollstation, secretword = secretword) }}", method="post">
-    <p>You are able to view your vote on the public ledger by entering your secret word for a short period of time after submitting. </p>   
-    <p style = "color: red; font-weight: bold">{{ errormessage }}</p>
+    <p>You are able to view your vote by entering your secret word for a short period of time after submitting. </p>   
+    <p style = "color: red; font-weight: bold; padding: 2%">{{ errormessage }}</p>
         <label for="sword">Enter your secret word:</label><br>
         <br>
         <input type="text" id="sword" name="sword" style="text-transform:uppercase" maxlength="15"><br>

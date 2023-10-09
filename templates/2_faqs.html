@@ -3,28 +3,49 @@
 {% block content %}
 <div class="middle">
     <h1>Frequently Asked Questions</h1>
+    <br>
     <p style="padding: 0.5%;">
-        Click the questions below to see the answers.
+        Carefully read through the answers below by clicking each question.
     </p>
+    <br>
     <div id='faqs'>
         <h3><a href="#faq1" class="nav-tab tab1">Hows does the voting work?</a></h3>
-        <p id='faq1' class='faq1'>This online voting system uses technology "blockchain" to record your vote such that is cannot be changed.</p>
+        <p id='faq1' class='faq1'>The voting tool will first check if you are able to vote and perform an identity check*.
+            You then select a candidate to vote for. When voting, you will be asked to provide a secret word unique to you
+            and your polling station. Once you cast your vote, a technology called “blockchain” is used to record your
+            vote such that it can't be changed.  For a short period of time after voting, you will be able to view
+            the candidate you voted for. This is for you to verify the correct vote has been cast by using your secret word.
+            <br>
+            <br>
+            *This test version will not perform any checks, so we will not collect any of your personal details.</p>
     </div>
     <div id='faqs'>
         <h3><a href="#faq2" class="nav-tab nav-tab-active tab2">What is blockchain?</a></h3>
-          <p id='faq2' class='faq2'>Blockchain is a way of storing data in a chain that is linked together through a unique id. When data is stored,
-            it is broadcast to many places storing data using what is known as a peer to peer network. This means many people are able to see and view
-            the data stored when your vote is collected.</p>
+          <p id='faq2' class='faq2'>Blockchain is a way of storing data. Pieces of data are stored in “blocks”.
+            Once stored, they cannot be changed. Each block contains data that can connect it to the previous block.
+            This means data is stored as a chain of block data that only has one order. Votes are collected without
+            your personal data. Instead, a secret word of your choosing is used to maintain the anonymity of your vote.
+            When storing the blocks, these are published in multiple places. This means people will be able to see and
+            view the data stored when your vote is collected. </p>
     </div>
     <div id='faqs'>
         <h3><a href="#faq3" class="nav-tab tab3">How can I know my vote will be counted correctly?</a></h3>
-          <p id='faq3' class='faq3'>This tool provides a self verification system whereby you can check your vote for a short period of time after voting.</p>
-        </div>
-      
-</div>
-<div class="middle-button">
-    <div class="button">
-        <a href="/checkeligibility" class="button">Continue</a>
+          <p id='faq3' class='faq3'>Blockchain data cannot be changed. Once your vote is stored that is the
+            vote that will be counted. This tool allows you to view your vote after it is stored. This is so you can
+            verify the person you voted for is what will be counted. This is only available up to five minutes after
+            you cast your vote and will require you to remember your secret word.</p>
     </div>
+    
+    <div id='faqs'>
+        <h3><a href="#faq4" class="nav-tab tab4">What can I use for my secret word?</a></h3>
+          <p id='faq4' class='faq4'>You can use a word or phrase up to 15 letters. However, you can't use any names of other
+            voters or addresses. You also can't use a word that has already been used by another voter at your poll station.
+            Try to choose something easy to remember. If you forget your secret word you will not be able to see your vote.</p>
+        </div>
+    
+        <div class="button">
+            <a href="/checkeligibility" class="button">Continue</a>
+        </div>
 </div>
+    
 {% endblock %}
