@@ -344,7 +344,7 @@ def fetchvote():
     pollstation = request.form['pollstation'].upper()
     voter = pollstation + secretword
     votes = r"databases_test\votes.db"
-    select_vote = "SELECT block FROM votes v WHERE block LIKE '%" + voter + "%';"
+    select_vote = "SELECT block FROM votes v WHERE JSON_EXTRACT(block, '$.voter') = '" + voter + "';"
     conn = connect_to_database(votes)
     voteblock = execute_sql_fetch_all(conn, select_vote)
     conn.close()
@@ -378,11 +378,9 @@ def fetchvote():
         candidate = 'Unable to view candidate.'
         return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
 
-    
-
 # Initialise
 if __name__ == '__main__':
     main()
     # If statement to prevent run when hosting in PythonAnywhere
     if 'liveconsole' not in gethostname():
-        app.run()
+        app.run(debug=True)
