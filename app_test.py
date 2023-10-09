@@ -144,11 +144,11 @@ def main():
     insert_table_words = """ INSERT INTO words (id, word, pollstation)
                               VALUES
                                 (1, 'TEST', 'all'),
-                                (2, 'Charlie', 'all'),
-                                (3, 'Voter', 'all'),
-                                (4, 'Sam', 'all'),
-                                (5, 'Bailey', 'all'),
-                                (6, 'Example', 'all');
+                                (2, 'CHARLIE', 'all'),
+                                (3, 'VOTER', 'all'),
+                                (4, 'SAM', 'all'),
+                                (5, 'BAILEY', 'all'),
+                                (6, 'EXAMPLE', 'all');
                             """
     
     # Table that stores basic information about test candidates
