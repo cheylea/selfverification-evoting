@@ -3,15 +3,15 @@
 {% block content %}
 <div class="middle">
     <h1>Check if you can vote</h1>
-    <p>When voting in person you are asked at the polling booth to provide your poll number or name and first line of your address to vote with.
-        In a real version of this tool, you would enter either your poll number or address to check you are able to vote.
-        For the purposes of this survey, we have provided some test voter details.
+    <p>When voting in person, you are asked at the polling booth to provide your poll number or name and first line of your address to vote with.
+        In a real version of this tool, you would enter either your poll number or name and address to check you are able to vote.
         <br>
         <br>
-        Please choose any test credentials to get started.
+        For the purposes of this survey, we have provided some test voter details to choose from.
+        <br>
     </p>
     <form action="{{ url_for("verifyeligibility")}}" method="post">
-        <label for="tester">Choose your test credentials:</label>
+        <label for="tester">Please select any of the below test credentials:</label>
         <br>
         <br>
         <select id="tester" name="tester">
