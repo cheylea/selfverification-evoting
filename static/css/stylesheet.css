@@ -156,8 +156,9 @@
   .custom-radios div {
     display: inline-block;
     text-align: left;
-    width: calc(800px + 0.390625vw);
+    width: calc(500px + 0.390625vw);
     margin: auto;
+    padding: 0.5%;
   }
 
   .custom-radios input[type="radio"] {

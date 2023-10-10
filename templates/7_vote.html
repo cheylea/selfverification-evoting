@@ -17,10 +17,17 @@
           </label>
           {{candidates[1]}} - {{candidates[2]}}
         </div>
-        <div>
-        </div>
-        <br>
         {% endfor %}
+        <p style = "padding: 1.5%"></p>
+        <div>
+        <input type="radio" id="I would like my vote to register as a non-vote" name="candidates" value="{{candidates.candidatename}}">
+        <label for="I would like my vote to register as a non-vote">
+          <span>
+            <img src="{{url_for('static',filename='images/cross.svg')}}"  alt="Checked Icon" />
+          </span>
+          </label>
+          I would like my vote to register as a non-vote
+        </div>
     </div>
     <br>
     <div class="middle-button">

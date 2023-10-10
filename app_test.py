@@ -369,7 +369,10 @@ def fetchvote():
         else:
             # If still within the time frame, user is shown their vote
             errormessage = ''
-            candidate = 'You voted for ' + candidate + '.'
+            if len(candidate) == 0:
+                candidate = 'You registered your vote as a non vote.'
+            else:
+                candidate = 'You voted for ' + candidate + '.'
             return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
 
     # If vote cannot be found
