@@ -160,6 +160,7 @@
     margin: auto;
     padding: 0.5%;
     font-size: calc(10px + 0.390625vw);
+    max-width: 95%;
   }
 
   .custom-radios input[type="radio"] {
