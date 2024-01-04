@@ -1,0 +1,118 @@
+{% extends '1_index.html' %}
+
+{% block content %}
+<div class="middle">
+    <h1>Identification Check</h1>
+    <p> Please hold your driving licence or provisional driving licence up to the camera and ensure a clean image is taken of it.
+    <br>
+    Click the button to take the image
+    <br>
+    </p>
+
+    <!-- Video container for the webcam -->
+    <div id="video-container">
+        <video id="video" width="640px" autoplay></video>
+        <img id="captured-image" alt="Captured Image">
+    </div>
+
+    <!-- Buttons to capture, try again and check identity -->
+    <div class="button">
+        <div id="capture-buttons">
+            <a id="capture-button" onclick="captureImage()" class="button">Capture</button>
+            <a id="try-again-button" onclick="tryAgain()" style="display: none;" class="button">Try Again</button>
+            <a id="continue-button" onclick="checkIdentity()" style="display: none;" class="button">Check Identity</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+        // Access the webcam
+        let video = document.getElementById('video');
+        let canvas = document.getElementById('canvas');
+        let capturedImage = document.getElementById('captured-image');
+        let captureButtons = document.getElementById('capture-buttons');
+        let imageCapture;
+
+        // Capture images from the webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+                imageCapture = new ImageCapture(stream.getVideoTracks()[0]);
+            })
+            // Error if cannot access the webcam
+            .catch(function (err) {
+                console.error('Error accessing webcam: ', err);
+            });
+
+            function captureImage() {
+            // Take photo and display on screen
+            imageCapture.grabFrame().then(imageBitmap => {
+                const canvas = document.createElement('canvas');
+                canvas.width = imageBitmap.width;
+                canvas.height = imageBitmap.height;
+                const context = canvas.getContext('2d');
+                context.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height);
+                capturedImage.src = canvas.toDataURL('image/png');
+                capturedImage.style.display = 'block';
+                captureButtons.style.display = 'block';
+
+                // Stop the webcam and hide it from the screen
+                const tracks = video.srcObject.getTracks();
+                tracks.forEach(track => track.stop());
+                video.style.display = 'none';
+
+                // Hide capture button
+                document.getElementById('capture-button').style.display = 'none';
+                // Display buttons to try taking photo again or continuing
+                document.getElementById('try-again-button').style.display = 'block';
+                document.getElementById('continue-button').style.display = 'block';
+            });
+  
+        }
+        
+        // Reload the page to try again
+        function tryAgain() {
+            location.reload();
+        }
+        
+        // Continue on to identity check
+        function checkIdentity() {
+            // Extract poll number
+            // Extract the parameter value from the URL
+            let paths = window.location.pathname.split('/');
+            let pollnumber = paths[paths.length - 1];
+
+            // Store the image
+            let imagedata = capturedImage.src.split(',')[1];
+            fetch('/storephoto/' + pollnumber, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `imagedata=${encodeURIComponent(imagedata)}&pollnumber=${pollnumber}`,
+            })
+            // Read response from page
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response from server:', data); // Log response for debugging
+                if (data.status === 'success') {
+                    console.log('success')
+                    // If passed, redirect to the passedidcheck page
+                    window.location.href = `/passedidcheck/${pollnumber}`;
+                } else {
+                    console.log('fail')
+                    // If failed, redirect to the failedidcheck page
+                    window.location.href = `/failedidcheck/${pollnumber}}`;
+                }
+            })
+            
+            // Hide both the Try again and continue buttons
+            document.getElementById('try-again-button').style.display = 'block';
+            document.getElementById('continue-button').style.display = 'block';
+
+        }
+    </script>
+
+
+{% endblock %}

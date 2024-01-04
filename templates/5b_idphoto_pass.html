@@ -1,0 +1,15 @@
+{% extends '1_index.html' %}
+
+{% block content %}
+<div class="middle">
+    <h1>Identification Check Passed!</h1>
+    <p>
+        Congratulations you have passed your id check and may move on to voting.
+    </p>
+</div>
+<div class="middle-button">
+    <div class="button">
+        <a href="/enterword/{{ pollnumber }}" class="button">Continue to Vote</a>
+    </div>
+</div>
+{% endblock %}
