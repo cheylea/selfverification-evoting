@@ -221,7 +221,7 @@ def main():
 # App route for index, an introduction welcome page for survey testing
 @app.route("/")
 def home():
-    return render_template("1_index.html")
+    return render_template("0_index.html")
 
 # App route for frequently asked questions about the tool and blockchain
 @app.route("/faqs")
