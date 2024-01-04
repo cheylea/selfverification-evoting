@@ -1,8 +1,13 @@
 # E-Voting Tool with Self Verification
-Dissertation project for MSci in Computer Science at University of Liverpool.
+
+This repository contains code for an internet electronic voting tool that uses a biometric and text identification system and a secret word self verification system. It is a prototype design for a potential voting model that could be used in UK government elections.
+
+This project is for MSci in Computer Science at University of Liverpool.
+
+Author: Cheylea Hopkinson
 
 # Directory
-The `instance` folder is not found in this repositiory and will need to be created upon download. More information under installation.
+The `instance` and `idphoto` folders are not found in this repositiory and will need to be created upon download. More information under installation.
 
 ```
 C:.
@@ -15,6 +20,7 @@ C:.
 ├───databases_test
 │   ├───voters.db
 │   └───votes.db
+├───idphoto
 ├───instance
 ├───static
 └───templates
@@ -22,24 +28,32 @@ C:.
 
 # Installation
 
+## Step One
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the dependencies.
 
 ```
 python -m pip install -r requirements.txt
 ```
 
-Create the folder `instance` in the repository as indicated in the director. Create a file caled `config.py`. Copy and paste and save into it the below:
+## Step Two
+Create the folder `instance` in the repository as indicated in the directory. Create a file caled `config.py`. Copy and paste and save into it the below:
 
 ```python
 SECRET_KEY = ''
 encryption_key = ''
 ```
-
 Add your own keys into the strings to run the programme.
+
+## Step Three
+Create the folder `idphoto` in the repository as indicated in the directory. Leave empty.
+
 
 # Usage
 
-Run `app_test.py` to run the application on the chosen port in the `config.py` file and navigate to view. You can configure the port at the bottom of the `app_test.py`. For example:
+There are two versions of this tool in the repository. The "test" version `app_test.py` that skips the biometric identification and the version that is the complete tool `app.py`.
+
+## Step One
+Run either `app.py` or `app_test.py` to run the application. You can configure the port at the bottom of the `app_test.py`. For example:
 
 ```python
 # Before
@@ -56,7 +70,36 @@ if __name__ == '__main__':
     if 'liveconsole' not in gethostname():
         app.run(debug=True, port = 8000)
 ```
+
 Then, if port is set to `8000`, navigate to http://127.0.0.1:8000 to view and click through the application to use it.
+
+## Step Two - app.py only
+`app.py` will require at least one test credential which is set up in the app.py script:
+
+```python
+from testdetails import myname, myaddress, mypostcode
+
+...
+
+# Insert test voters
+insert_table_voters = """ INSERT INTO voters (id, pollstation, pollnumber, name, address, postcode, iseligible)
+                          VALUES
+                            (1, 'ABC', 1, 'Charlie Voter (Test)', '1 Example Street', 'ZZ01 000', 1),
+                            (2, 'ABC', 2, 'Sam Voter (Test)', '2 Example Street', 'ZZ01 000', 1),
+                            (3, 'ABC', 3, 'Bailey Voter (Test)', '3 Example Street', 'ZZ01 000', 1),
+                            (4, 'ABC', 4, '""" + myname + """', '""" + myaddress + """', '""" + mypostcode + """', 1);
+```
+
+Create a file in the root called `testdetails.py` and past your test details to compare to a real or generated id:
+
+``` python
+
+# My Address
+myname = 'John Smith' # full name
+myaddress = '1 Test Street' # address without postcode
+mypostcode = 'AA00 0AA' # postcode
+
+```
 
 # Contributing
 Pull requests permitted.
