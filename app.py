@@ -429,13 +429,24 @@ def submitvote(pollnumber, secretword):
     block = str(json.dumps(block))
 
     # Insert block and used word into votes database
-    insert_new_block = "INSERT INTO votes (block) VALUES ('" + block + "');"
-    insert_used_word = "INSERT INTO words (word, pollstation) VALUES ('" + secretword + "', '" + pollstation + "');"
-    execute_sql(conn, insert_new_block)
-    execute_sql(conn, insert_used_word)
+    try:
+        insert_new_block = "INSERT INTO votes (block) VALUES ('" + block + "');"
+        insert_used_word = "INSERT INTO words (word, pollstation) VALUES ('" + secretword + "', '" + pollstation + "');"
+        execute_sql(conn, insert_new_block)
+        execute_sql(conn, insert_used_word)
+        conn.commit()
+        conn.close
+    except:
+        return redirect("error.html")
+
+    # Person marked as ineligible to vote once vote is committed
+    voters = r"databases_test\voters.db"
+    mark_ineligible = "UPDATE voters SET IsEligible = 0 FROM (SELECT * FROM voters) voterslist WHERE voters.pollstation || CAST(voters.pollnumber as text) = '" + pollnumber + "';"
+    conn2 = connect_to_database(voters)
+    execute_sql(conn2, mark_ineligible)
     conn.commit()
-    # In full version the person would be marked as ineligible to vote once vote is committed
     conn.close
+    
     return render_template("8_complete.html")
 
 # Screen to request pollstation and secret word to verify vote
