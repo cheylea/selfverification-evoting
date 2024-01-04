@@ -1,4 +1,4 @@
-# E-Voting Tool with Self Verification
+# Internet Electronic Voting Tool with Biometric and Text Identification and Self Verification
 
 This repository contains code for an internet electronic voting tool that uses a biometric and text identification system and a secret word self verification system. It is a prototype design for a potential voting model that could be used in UK government elections.
 
