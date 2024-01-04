@@ -4,7 +4,6 @@ import pytesseract
 from PIL import Image
 from difflib import SequenceMatcher
 import datetime as dt
-from testdetails import tesseractfolder
 
 """
 Class containing functions for the biometric and text identification check.

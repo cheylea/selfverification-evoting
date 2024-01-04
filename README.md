@@ -101,5 +101,14 @@ mypostcode = 'AA00 0AA' # postcode
 
 ```
 
+## Step Three - app.py only
+You may get an error if your tesseract install is not located at `r"C:\Program Files\Tesseract-OCR\tesseract.exe"`. Correct the script in `identification.py`:
+
+``` python
+# Use Tesseract to extract text from the image
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+text = pytesseract.image_to_string(image)
+```
+
 # Contributing
 Pull requests permitted.
