@@ -3,16 +3,16 @@
 {% block content %}
 <div class="middle">
     <h1>Identification Check</h1>
-    <p>At this stage in the process, you would be asked to provide your photo identification and take a live photo of yourself.
+    <p>You will now be asked to take a photo of your Driving Licence or Provisional Licence.
     <br>
-    For the purposes of this prototype, you will not need to provide either of these.
+    Once completed, your webcam will turn on and your face will be compared to your license, alongside your name and address.
+    Please ensure your face is facing the webcam ready to be checked upon submission of the photo of your id.
     <br>
-    <b>{{ name }}</b> will automatically pass the identification check.
     </p>
 </div>
 <div class="middle-button">
     <div class="button">
-        <a href="/enterword/{{ pollnumber }}" class="button">Check Identity</a>
+        <a href="/idphoto/{{ pollnumber }}" class="button">Check Identity</a>
     </div>
 </div>
 {% endblock %}
