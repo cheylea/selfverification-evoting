@@ -397,7 +397,7 @@ def fetchvote():
 
 # Error page
 @app.route("/error")
-def enterword():
+def error():
     return render_template("error.html")
 
 # Initialise
