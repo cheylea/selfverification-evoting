@@ -499,6 +499,11 @@ def fetchvote():
         candidate = 'Unable to view candidate.'
         return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
 
+# Error page
+@app.route("/error")
+def enterword():
+    return render_template("error.html")
+
 # Initialise
 if __name__ == '__main__':
     main()
