@@ -4,14 +4,16 @@
 /* Contents
 ––––––––––––––––––––––––––––––––––––––––––––––––––--------------------*/
 /*
-1. Reset default margins, padding and borders
-2. Styling for the overall body of website
-3. Styling for the header portion of website
-4. Styling for the Navigation Bar of website
-5. Place the main and right hand side content next to each other
-6. Styling for main content of the website
-7. Styling for any right hand side content of the website
-8. Styling for the footer of website
+1.  Reset default margins, padding and borders
+2.  Styling for the overall body of website
+3.  Styling for the header portion of website
+4.  Styling for the Navigation Bar of website
+5.  Place the main and right hand side content next to each other
+6.  Styling for main content of the website
+7.  Styling for any right hand side content of the website
+8.  Styling for the footer of website
+9.  FAQ Styling
+10. Styling for webcam image displays
 */
 
 /* 1. Reset default margins, padding and borders
@@ -142,17 +144,7 @@
     font-size: calc(15px + 0.390625vw);
   }
 
-  /*input[type=radio] {
-    box-sizing: border-box;
-    appearance: none;
-    background: white;
-    outline: 2px solid #333;
-    border: 3px solid white;
-    width: calc(40px + 0.390625vw);
-    height: calc(40px + 0.390625vw);
-  }
-
-  /* using https://www.sliderrevolution.com/resources/styling-radio-buttons/ */
+  /* Source: https://www.sliderrevolution.com/resources/styling-radio-buttons/ */
   .custom-radios div {
     display: inline-block;
     text-align: left;
@@ -178,6 +170,7 @@
     width: calc(40px + 0.390625vw);
     height: calc(40px + 0.390625vw);
     vertical-align: middle;
+    /* Make cursor a pencil when hovering over */
     cursor:  url('pencil_cursor.ico'), auto;
     outline: 2px solid black;
     background: white;
@@ -255,3 +248,20 @@
   div#faqs a:hover {
     color: #1d70b8;
   }
+
+  /* 10. Styling for webcam image displays
+  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+  #video-container {
+    width: 100%; 
+    max-width: 640px;
+    margin: auto;
+    display: block;
+}
+
+#captured-image {
+    display: none;
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+    margin: auto;
+}
