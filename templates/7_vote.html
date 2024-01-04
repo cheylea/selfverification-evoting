@@ -4,9 +4,11 @@
 <div class="middle">
     <h1>Vote</h1>
     <p style = "padding: 1%">Please choose ONE of the candidates below to vote for.</p>
+    <!-- Submit the results to the form -->
     <form action="{{ url_for('submitvote', pollnumber=pollnumber, secretword = secretword) }}", method="post">
     <p style = "padding: 1%">Choose your candidate:</p><br>
     <div class="custom-radios">
+        <!-- List each available candidate in the window -->
         {% for candidates in candidates %}
         <div>
         <input type="radio" id="{{candidates.candidatename}}" name="candidates" value="{{candidates.candidatename}}">
@@ -18,11 +20,13 @@
           {{candidates[1]}} - {{candidates[2]}}
         </div>
         {% endfor %}
+        <!-- Render the check buttons and non-vote option -->
         <p style = "padding: 1.5%"></p>
         <div>
         <input type="radio" id="I would like my vote to register as a non-vote" name="candidates" value="{{candidates.candidatename}}">
         <label for="I would like my vote to register as a non-vote">
           <span>
+            <!-- Marked with a cross when checkbox is selected-->
             <img src="{{url_for('static',filename='images/cross.svg')}}"  alt="Checked Icon" />
           </span>
           </label>
@@ -32,6 +36,7 @@
     <br>
     <div class="middle-button">
         <div class="button">
+            <!-- Alter user to confirm their vote-->
             <input type="submit" onclick="return confirm('Check your selection. Do you still wish to continue?')" value="Click here to submit vote">
         </div>
         

@@ -3,6 +3,8 @@
 {% block content %}
 <div class="middle">
     <h1>Secret Word</h1>
+
+    <!-- Return the word to the form for checking -->
     <form action="{{ url_for('enterwordcheck', pollnumber=pollnumber) }}", method="post">
     <p>Your secret word will be used to verify your vote. Remember: you can use a word or phrase up to 15 letters.
         However, you can't use any names of other voters or addresses. You also can't use a word that has already been used by another

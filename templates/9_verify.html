@@ -3,6 +3,7 @@
 {% block content %}
 <div class="middle">
     <h1>Verify your vote</h1>
+    <!-- Receipt input for secret word for vote verification-->
     <form action="{{ url_for('fetchvote', pollstation=pollstation, secretword = secretword) }}", method="post">
     <p>You are able to view your vote by entering your secret word for five minutes after submitting. </p>
     <p style = "color: red; font-weight: bold; padding: 2%">{{ errormessage }}</p>
