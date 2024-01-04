@@ -1,0 +1,17 @@
+{% extends '1_index.html' %}
+
+{% block content %}
+<div class="middle">
+    <h1>Verify Identification</h1>
+    <p style = "color: red; font-weight: bold; padding: 2%">{{ errormessage }}</p>
+    <p style = "padding: 2%">{{ candidate }}</p>
+    <div class="button">
+        <a href="/verify" class="button">Try Again</a>
+    </div>
+    <p>Thank you for taking part in this survey. To prove you have tested the tool, copy the word below and paste it into the survey question:
+        <i>"What word was shown on screen at the end of the test?"</i></p>
+    <h1 style = "color: rgb(14, 86, 137); font-weight: bold; padding: 0%;">CANDIDATE</h1>
+    <br>
+    <p style = "padding: 2%">You may now close the window.</p>
+</div>
+{% endblock %}
