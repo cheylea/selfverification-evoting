@@ -1,17 +1,30 @@
-import sqlite3
-import json
-from flask import Flask, render_template, request, redirect, url_for
-from blockchain import Blockchain
+# General requirements
 from datetime import datetime, timedelta
+
+# Setup Flask app
+from flask import Flask, render_template, request, redirect, url_for
+from flask_cors import CORS
+app = Flask(__name__, instance_relative_config=True)
+CORS(app, resources={r"/storephoto": {"origins": "http://127.0.0.1:5000/"}})
+
+# Setup blockchain and encryption
+import json
+from blockchain import Blockchain
 from cryptography.fernet import Fernet
 from instance.config import encryption_key
-from socket import gethostname
-
 blockchain = Blockchain()
-
-app = Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile('config.py')
 key = encryption_key
+
+# Setup for SQL databases
+import sqlite3
+from socket import gethostname
+
+"""
+Test version of the Electronic Voting Tool System with biometric and text identification using driving
+licences.
+This application is currently hosted at: https://www.selfverificationelectronicvotingtool.co.uk/
+"""
 
 
 # Functions for databases
@@ -212,7 +225,7 @@ def checkeligibility():
     conn = connect_to_database(voters)
     result = execute_sql_fetch_all(conn, select_all_voters)
     conn.close
-    return render_template("3_checkeligibility.html", test_voters = result)
+    return render_template("4_checkeligibilitytest.html", test_voters = result)
 
 # Verify if the person is eligible to vote
 @app.route("/verifyeligibility", methods=['GET', 'POST'])
@@ -225,9 +238,9 @@ def verifyeligibility():
     result = execute_sql_fetch_one(conn, select_eligibility)
     conn.close
 
-
     pollnumber = encrypt(key, pollnumber) # encrypt for url
-    if result[0] == 1: 
+
+    if result[0] == 1:
         # If person is eligible, proceed
         return redirect(url_for('verifyid', pollnumber = pollnumber))
     else:
@@ -248,7 +261,8 @@ def verifyid(pollnumber):
     conn.close
 
     pollnumber = encrypt(key, pollnumber) # encrypt for url
-    return render_template("5_verifyid.html", name = result[0], pollnumber = pollnumber.decode('utf-8'))
+    
+    return render_template("5_verifyid_test.html", name = result[0], pollnumber = pollnumber.decode('utf-8'))
 
 # Screen to enter secret word
 @app.route("/enterword/<pollnumber>")
@@ -365,7 +379,7 @@ def fetchvote():
             # If too much time has passed, the user is notified this has expired
             errormessage = 'Time to verify vote has expired.'
             candidate = 'Unable to view candidate.'
-            return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
+            return render_template("10_seevotetest.html", candidate = candidate, errormessage = errormessage)
         else:
             # If still within the time frame, user is shown their vote
             errormessage = ''
@@ -373,13 +387,13 @@ def fetchvote():
                 candidate = 'You registered your vote as a non vote.'
             else:
                 candidate = 'You voted for ' + candidate + '.'
-            return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
+            return render_template("10_seevotetest.html", candidate = candidate, errormessage = errormessage)
 
     # If vote cannot be found
     else:
         errormessage = 'Word and polling station did not find a match.'
         candidate = 'Unable to view candidate.'
-        return render_template("10_seevote.html", candidate = candidate, errormessage = errormessage)
+        return render_template("10_seevotetest.html", candidate = candidate, errormessage = errormessage)
 
 # Initialise
 if __name__ == '__main__':
