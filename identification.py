@@ -1,9 +1,9 @@
 import cv2
 import face_recognition
+import datetime as dt
 import pytesseract
 from PIL import Image
 from difflib import SequenceMatcher
-import datetime as dt
 
 """
 Class containing functions for the biometric and text identification check.

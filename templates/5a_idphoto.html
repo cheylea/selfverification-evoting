@@ -20,7 +20,7 @@
         <div id="capture-buttons">
             <a id="capture-button" onclick="captureImage()" class="button">Capture</button>
             <a id="try-again-button" onclick="tryAgain()" style="display: none;" class="button">Try Again</button>
-            <a id="continue-button" onclick="checkIdentity()" style="display: none;" class="button">Check Identity</button>
+            <a id="checkidentity-button" onclick="checkIdentity()" style="display: none;" class="button">Check Identity</button>
         </div>
     </div>
 </div>
@@ -66,7 +66,7 @@
                 document.getElementById('capture-button').style.display = 'none';
                 // Display buttons to try taking photo again or continuing
                 document.getElementById('try-again-button').style.display = 'block';
-                document.getElementById('continue-button').style.display = 'block';
+                document.getElementById('checkidentity-button').style.display = 'block';
             });
   
         }
@@ -109,7 +109,7 @@
             
             // Hide both the Try again and continue buttons
             document.getElementById('try-again-button').style.display = 'block';
-            document.getElementById('continue-button').style.display = 'block';
+            document.getElementById('checkidentity-button').style.display = 'block';
 
         }
     </script>

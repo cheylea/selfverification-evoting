@@ -26,7 +26,7 @@ class Blockchain:
         candidate --
         previous_hash --
         """
-        voter = pollstation + secretword #add some kind of ecryption?
+        voter = pollstation + secretword
         block = {'index': len(self.chain) + 1,
                  'timestamp': str(datetime.datetime.now()),
                  'proof': proof,

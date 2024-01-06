@@ -225,7 +225,7 @@ def home():
 
 # App route for frequently asked questions about the tool and blockchain
 @app.route("/faqs")
-def info():
+def faqs():
     return render_template("2_faqs.html")
 
 # Placeholder for providing your poll number or name and address to check eligibility (must come before ID check)
