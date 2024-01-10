@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Python program to create Blockchain
 """
 Source: https://www.geeksforgeeks.org/create-simple-blockchain-using-python/

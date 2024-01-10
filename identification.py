@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+# Python program to create Blockchain
+
+# Imports
 import cv2
 import face_recognition
 import datetime as dt

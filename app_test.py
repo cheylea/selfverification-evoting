@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Test version of Electronic Voting Tool (does not include Identification)
 """
 Test version of the Electronic Voting Tool System with biometric and text identification using driving

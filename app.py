@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Full version of Electronic Voting Tool (includes Identification)
 
 # General requirements

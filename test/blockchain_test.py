@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Python Programme to test Blockchain class
 import os
 import inspect
