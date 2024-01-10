@@ -38,7 +38,6 @@ class Identification:
         # Provisional or full UK driving licence take up multiple lines
         # Split the text string of new lines into sections
         text_split = text.splitlines()
-        print(text_split)
 
         # Try to extract full name
         try:
@@ -53,11 +52,9 @@ class Identification:
         # Clean up the name found on the ID licence to improve similarity check
         id_name = id_name.replace(" ","").replace(",","").upper() # Remove spaces, commas and capitalise
         id_name = id_name.replace("MR","").replace("MRS","").replace("MISS","").replace("DR","").replace("REV","").replace("MX","") # Strip titles
-        print(id_name)
 
         # Clean up the comparison name given to the function to improve similarity check
         name = name.replace(" ","").replace(",","").upper() # Remove spaces, commas and capitalise
-        print(name)
 
         # Try to extract address
         try:
@@ -79,11 +76,9 @@ class Identification:
 
         # Clean up the address found on the ID licence to improve similarity check
         id_address = id_address.replace(" ","").replace(",","").upper() # Remove spaces, commas and capitalise
-        print(id_address)
 
         # Clean up the comparison address given to the function to improve similarity check
         address = address.replace(" ","").replace(",","").upper() # Remove spaces, commas and capitalise
-        print(address)
 
         # Run the SequenceMatcher to calculate the similarity ratios for name and address
         name_similarity_ratio = SequenceMatcher(None, id_name, name).ratio()
@@ -138,7 +133,7 @@ class Identification:
             for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
                 # Add results to matches variable
                 matches = face_recognition.compare_faces([known_encoding], face_encoding)
-
+                print("no match yet")
                 # If a true match is found
                 if True in matches:
                     # Set to true
@@ -151,15 +146,16 @@ class Identification:
 
             # Stop trying after 2 minutes
             # Set 2 minute change
-            time_change = dt.timedelta(minutes=2)
+            time_change = dt.timedelta(minutes=0.4)
             # Set the stop time to start time plus 2 minutes
-            stop_time = starttime + time_change
 
+            stop_time = starttime + time_change
             # If time exceeded the stop time, the result is returned as false
             if stop_time < dt.datetime.now():
                 # Set to false
                 matched = "false"
                 # Close webcam
                 video_capture.release()
+                print("time expired")
                 # Return result
                 return matched
