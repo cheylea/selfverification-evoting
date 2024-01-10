@@ -6,6 +6,9 @@ This project is for MSci in Computer Science at University of Liverpool.
 
 Author: Cheylea Hopkinson
 
+## Python Version
+This project requires Python 3.9.12.
+
 # Directory
 The `instance` and `idphoto` folders may not be found in this repositiory and will need to be created upon download. More information under installation.
 
