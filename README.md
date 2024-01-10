@@ -41,6 +41,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the dep
 ```
 python -m pip install -r requirements.txt
 ```
+You will also need to download and install [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
 
 ## Step Two
 Create the folder `instance` if required in the repository as indicated in the directory. Create a file caled `config.py`. Copy and paste and save into it the below:
@@ -109,7 +110,7 @@ mypostcode = 'AA00 0AA' # postcode
 ```
 
 ## Step Three - app.py only
-You may get an error if your tesseract install is not located at `r"C:\Program Files\Tesseract-OCR\tesseract.exe"`. Correct the script in `identification.py`:
+You may get an error if your tesseract install is not located at `r"C:\Program Files\Tesseract-OCR\tesseract.exe"`. Ensure you have downloaded and installed [Tesseract](https://github.com/UB-Mannheim/) as mentioned in installed. Then you may need to correct the script in `identification.py` to the correct directory:
 
 ``` python
 # Use Tesseract to extract text from the image
