@@ -36,7 +36,7 @@ class Blockchain:
         self.chain.append(block)
         return block
  
-    def print_previous_block(self):
+    def return_previous_block(self):
         """Display previous block
         """
         return self.chain[-1]
