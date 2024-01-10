@@ -1,10 +1,12 @@
+# Full version of Electronic Voting Tool (includes Identification)
+
 # General requirements
 from datetime import datetime, timedelta
 import os
 import base64
 
 # Setup Flask app
-from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_cors import CORS
 app = Flask(__name__, instance_relative_config=True)
 CORS(app, resources={r"/storephoto": {"origins": "http://127.0.0.1:5000/"}})
@@ -257,7 +259,7 @@ def verifyeligibility():
     else:
         # If person is not eligible, redirect
         # For this version of the tool this is an error page as all test credentials should be eligible
-        return redirect("error.html")
+        return redirect(url_for("error"))
 
 # Placeholder for identification process in full version of the artefact
 @app.route("/verifyid/<pollnumber>")
@@ -320,7 +322,7 @@ def checkid(pollnumber, imagename):
 
     text_result = id.check_identification_text(imagepath, name, address)
     print(text_result)
-    if text_result[0] > 0.5 and text_result[1] > 0.5:
+    if (text_result[0] > 0.5 and text_result[1] > 0.5) or text_result[0] > 0.75:
         # If passes text check, then moves to photo check
         face_result = id.check_identification_face(imagepath)
         if face_result == "true":
