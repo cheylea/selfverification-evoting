@@ -18,7 +18,15 @@ key = encryption_key
 import random
 import string
 
-candidates = ["Test Candidate 1", "Test Candidate 2", "Test Candidate 3", "Test Candidate 4", "Test Candidate 5", "Test Candidate 6"]
+candidates = [
+    "Test Candidate 1",
+    "Test Candidate 2",
+    "Test Candidate 3",
+    "Test Candidate 4",
+    "Test Candidate 5",
+    "Test Candidate 6",
+]
+
 
 # Functions sourced from: https://pynative.com/python-generate-random-string/
 def get_random_string(length):
@@ -34,11 +42,10 @@ def get_random_string(length):
     return result_str
 
 
-
 def blockchain_test_block():
     """Creates a block in the existing
     chain that will randomly experience
-    "interferencd" leading to the chain 
+    "interferencd" leading to the chain
     being altered.
 
     Key arguments
@@ -57,11 +64,16 @@ def blockchain_test_block():
 
     # Introduce random possibility of replacement block
     if random.random() < 0.01:
-        candidate = candidates[0] # For just this test, can tell when the candidate was changed
+        candidate = candidates[0]  # Specific candidate for hacked
         previous_hash = "HACKED" + get_random_string(58)
 
     # Mine new block
-    block = blockchain.create_block(proof, pollstation, secretword, candidate, previous_hash)
+    block = blockchain.create_block(
+        proof,
+        pollstation,
+        secretword,
+        candidate,
+        previous_hash)
     block = str(json.dumps(block))
 
 
@@ -81,31 +93,32 @@ def test_blockchain(chain_length):
         i += 1
     test_blockchain = blockchain.chain
     # Test if the chain is valid
-    if blockchain.chain_valid(test_blockchain) == True:
+    if blockchain.chain_valid(test_blockchain) is True:
         result = "Chain valid"
     else:
         result = "Chain not valid"
     # Return result
     final_result = [result, test_blockchain]
     # Write result to file
-    with open("test/results/blockchain_test_chain.txt","a") as blockchain_test_chain:
-        blockchain_test_chain.write("%s\n" % final_result)
+    with open("test/results/blockchain_test_chain.txt", "a") as bc_test_chain:
+        bc_test_chain.write("%s\n" % final_result)
 
 # U N C O M M E N T   T O   R E F R E S H   R E S U L T S
 # Run a set number of test blockchains and check their validity
-#with open("test/blockchain_test_chain.txt","w") as blockchain_test_chain:
-#    i = 1
-#    while i <= 200:
-#        blockchain.__init__() # Initialise to refresh chain
-#        test_blockchain(20) # Create test chains of 20
-#        print("Test " + str(i) + " complete.")
-#        i += 1
+# with open("test/blockchain_test_chain.txt","w") as blockchain_test_chain:
+#     i = 1
+#     while i <= 200:
+#         blockchain.__init__() # Initialise to refresh chain
+#         test_blockchain(20) # Create test chains of 20
+#         print("Test " + str(i) + " complete.")
+#         i += 1
+
 
 # Read positive and negative results from the file
 blockchain_results = []
-with open("test/results/blockchain_test_chain.txt","r") as bc_results:
+with open("test/results/blockchain_test_chain.txt", "r") as bc_results:
     for line in bc_results:
-        result = line[:-1] # Remove new line character
+        result = line[:-1]  # Remove new line character
         result = result.strip('][').split(', ')
         blockchain_results.append(result)
 
@@ -113,11 +126,19 @@ with open("test/results/blockchain_test_chain.txt","r") as bc_results:
 results = []
 
 # Get the count of True Positives, False Positives, True Negatives and False Negatives
-blockchain_true_positives = sum(1 for r in blockchain_results if r[0] == "'Chain valid'" and "HACKED" not in str(r[1:]))
-blockchain_false_positives = sum(1 for r in blockchain_results if r[0] == "'Chain valid'" and "HACKED" in str(r[1:]))
+blockchain_true_positives = sum(1 for r in blockchain_results
+                                if r[0] == "'Chain valid'"
+                                and "HACKED" not in str(r[1:]))
+blockchain_false_positives = sum(1 for r in blockchain_results
+                                 if r[0] == "'Chain valid'"
+                                 and "HACKED" in str(r[1:]))
 
-blockchain_true_negatives = sum(1 for r in blockchain_results if r[0] == "'Chain not valid'" and "HACKED" in str(r[1:]))
-blockchain_false_negatives = sum(1 for r in blockchain_results if r[0] == "'Chain not valid'" and "HACKED" not in str(r[1:]))
+blockchain_true_negatives = sum(1 for r in blockchain_results
+                                if r[0] == "'Chain not valid'"
+                                and "HACKED" in str(r[1:]))
+blockchain_false_negatives = sum(1 for r in blockchain_results
+                                 if r[0] == "'Chain not valid'"
+                                 and "HACKED" not in str(r[1:]))
 
 # Use the counts to calculate the sensitivity, specificity and accuracy
 blockchain_sensitivity = blockchain_true_positives / (blockchain_true_positives + blockchain_false_negatives) * 100
