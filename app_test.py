@@ -1,3 +1,10 @@
+# Test version of Electronic Voting Tool (does not include Identification)
+"""
+Test version of the Electronic Voting Tool System with biometric and text identification using driving
+licences.
+This application is currently hosted at: https://www.selfverificationelectronicvotingtool.co.uk/
+"""
+
 # General requirements
 from datetime import datetime, timedelta
 
@@ -19,12 +26,6 @@ key = encryption_key
 # Setup for SQL databases
 import sqlite3
 from socket import gethostname
-
-"""
-Test version of the Electronic Voting Tool System with biometric and text identification using driving
-licences.
-This application is currently hosted at: https://www.selfverificationelectronicvotingtool.co.uk/
-"""
 
 
 # Functions for databases
