@@ -7,23 +7,30 @@ This project is for MSci in Computer Science at University of Liverpool.
 Author: Cheylea Hopkinson
 
 # Directory
-The `instance` and `idphoto` folders are not found in this repositiory and will need to be created upon download. More information under installation.
+The `instance` and `idphoto` folders may not be found in this repositiory and will need to be created upon download. More information under installation.
 
 ```
 C:.
+├───__init__.py
+├───app_test.py
+├───app.py
+├───blockchain.py
+├───identification.py
 ├───LICENSE
 ├───README.md
 ├───requirements.txt
-├───app_test.py
-├───blockchain.py
-│
 ├───databases_test
 │   ├───voters.db
 │   └───votes.db
 ├───idphoto
 ├───instance
 ├───static
-└───templates
+├───templates
+└───test
+    ├───results
+    ├───test_images
+    ├───blockchain_test.py
+    └───identification_test.py
 ```
 
 # Installation
@@ -36,7 +43,7 @@ python -m pip install -r requirements.txt
 ```
 
 ## Step Two
-Create the folder `instance` in the repository as indicated in the directory. Create a file caled `config.py`. Copy and paste and save into it the below:
+Create the folder `instance` if required in the repository as indicated in the directory. Create a file caled `config.py`. Copy and paste and save into it the below:
 
 ```python
 SECRET_KEY = ''
@@ -45,7 +52,7 @@ encryption_key = ''
 Add your own keys into the strings to run the programme.
 
 ## Step Three
-Create the folder `idphoto` in the repository as indicated in the directory. Leave empty.
+Create the folder `idphoto` if required in the repository as indicated in the directory. Leave empty.
 
 
 # Usage
@@ -109,6 +116,24 @@ You may get an error if your tesseract install is not located at `r"C:\Program F
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 text = pytesseract.image_to_string(image)
 ```
+
+# Testing
+
+## Identification
+`identification_test.py` is a file for looping through the text and face recognition tools to check their results from a provided folder of images. Load your images into the text_images folder.
+Open the folder in file explorer and right click to open terminal. Type in the following
+
+``` bash
+dir /b > filenames.txt
+```
+
+This will create a file in the images folder that is used in the test module to load in the file path for the images. To prevent any images uploading to git, add these file names to your `.gitignore` file.
+
+There are example results provided in the folder `test/results` which can be used to calculate the results by running the `identification_test.py` file. To refresh the results, uncomment where indicated.
+
+## Blockchain
+`blockchain_test.py` is a file for looping through test blockchains with added interference. This is to test the chain valid function and to ensure altered blocks would be identified.
+There are example results provided in the folder `test/results` which can be used to calculate the results by running the `blockchain_test.py` file. To refresh the results, uncomment where indicated.
 
 # Contributing
 Pull requests permitted.
