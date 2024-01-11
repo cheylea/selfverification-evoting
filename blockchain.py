@@ -74,7 +74,7 @@ class Blockchain:
         """Validate chain
 
         Key arguments
-        chain --
+        chain -- a blockchain to check the validation of
         """
         previous_block = chain[0]
         block_index = 1
