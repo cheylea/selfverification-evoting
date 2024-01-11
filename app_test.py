@@ -8,6 +8,7 @@ This application is currently hosted at: https://www.selfverificationelectronicv
 
 # General requirements
 from datetime import datetime, timedelta
+from socket import gethostname # for PythonAnywhere
 
 # Setup Flask app
 from flask import Flask, render_template, request, redirect, url_for
@@ -26,7 +27,6 @@ key = encryption_key
 
 # Setup for SQL databases
 import sqlite3
-from socket import gethostname
 
 
 # Functions for databases

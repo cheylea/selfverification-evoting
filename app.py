@@ -5,6 +5,7 @@
 from datetime import datetime, timedelta
 import os
 import base64
+from socket import gethostname # for PythonAnywhere
 
 # Setup Flask app
 from flask import Flask, render_template, request, redirect, url_for, jsonify
@@ -23,7 +24,6 @@ key = encryption_key
 
 # Setup for SQL databases
 import sqlite3
-from socket import gethostname
 from testdetails import myname, myaddress, mypostcode
 
 # Setup for Identification
