@@ -101,7 +101,7 @@ insert_table_voters = """ INSERT INTO voters (id, pollstation, pollnumber, name,
                             (4, 'ABC', 4, '""" + myname + """', '""" + myaddress + """', '""" + mypostcode + """', 1);
 ```
 
-Create a file in the root called `testdetails.py` and past your test details to compare to a real or generated id:
+Create a file in the root called `testdetails.py` and paste your test details to compare to a real or generated id:
 
 ``` python
 
