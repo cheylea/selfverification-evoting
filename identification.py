@@ -12,7 +12,9 @@ from difflib import SequenceMatcher
 """
 Class containing functions for the biometric and text identification check.
 Functions accept an image path to use for identification.
-
+Sources:
+https://realpython.com/face-recognition-with-python/
+https://medium.com/@pawan329/ocr-extract-text-from-image-in-8-easy-steps-3113a1141c34
 """
 
 class Identification:
