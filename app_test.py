@@ -264,7 +264,7 @@ def verifyid(pollnumber):
 
     pollnumber = encrypt(key, pollnumber) # encrypt for url
     
-    return render_template("5_verifyid_test.html", name = result[0], pollnumber = pollnumber.decode('utf-8'))
+    return render_template("5_verifyidtest.html", name = result[0], pollnumber = pollnumber.decode('utf-8'))
 
 # Screen to enter secret word
 @app.route("/enterword/<pollnumber>")
